@@ -11,6 +11,8 @@ A cache library for Clojure implementing different strategies.
 - LRU cache
 - LU cache
 - TTL cache
+- [LIRS](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.116.2184) cache
+
 
 # in progress
 
@@ -20,13 +22,12 @@ A cache library for Clojure implementing different strategies.
 
 - associative interfaces
 - pass-through cache
-- [LIRS](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.116.2184)  
 - more docs and examples
 - code cleanup
 
 # credits
 
-Thanks to [Justin Balthrop](http://ninjudd.com/) for letting me steal the name *clache*.
+Thanks to [Justin Balthrop](http://ninjudd.com/) for letting me steal the name *clache* and [deduktion](https://github.com/deduktion) for the LIRS implementation.
 
 License
 -------
