@@ -260,7 +260,7 @@
     (str cache \, \space lruS \, \space lruQ \, \space tick \, \space limitS \, \space limitQ)))
 
 
-(declare dissoc-dead)
+(declare key-killer)
 
 (deftype TTLCache [cache ttl limit]
   CacheProtocol
@@ -274,25 +274,22 @@
   (hit [this item] this)
   (miss [this item result]
     (let [now  (System/currentTimeMillis)
-          this (dissoc-dead this now)]
-      (TTLCache. (assoc (:cache this) item result)
-                 (assoc (:ttl this) item now)
+          kill-old (key-killer ttl limit now)]
+      (TTLCache. (assoc (kill-old cache) item result)
+                 (assoc (kill-old ttl) item now)
                  limit)))
   (seed [_ base]
     (TTLCache. {} {} limit))
-  
+
   Object
   (toString [_]
     (str cache \, \space ttl \, \space limit)))
 
-(defn- dissoc-dead
-  [state now]
-  (let [ks (map key (filter #(> (- now (val %)) (:limit state))
-                            (:ttl state)))
-        dissoc-ks #(apply dissoc % ks)]
-    (TTLCache. (dissoc-ks (:cache state))
-               (dissoc-ks (:ttl state))
-               (:limit state))))
+(defn- key-killer
+  [ttl limit now]
+  (let [ks (map key (filter #(> (- now (val %)) limit)
+                            ttl))]
+    #(apply dissoc % ks)))
 
 
 (deftype LUCache [cache lu limit]
