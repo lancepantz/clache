@@ -12,7 +12,7 @@
 ; remove this notice, or any other, from this software.
 
 (ns fogus.clache
-  "TODO"
+  ""
   {:author "fogus"})
 
 ;; # Protocols and Types
