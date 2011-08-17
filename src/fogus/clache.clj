@@ -279,7 +279,10 @@
                  (assoc (kill-old ttl) item now)
                  limit)))
   (seed [_ base]
-    (TTLCache. {} {} limit))
+    (let [now (System/currentTimeMillis)]
+      (TTLCache. base
+                 (into {} (for [x base] [(key x) now]))
+                 limit)))
 
   Object
   (toString [_]
