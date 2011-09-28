@@ -46,7 +46,15 @@
   (seed [_ base]
     (BasicCache. base))
   Object
-  (toString [_] (str cache)))
+  (toString [_] (str cache))
+
+  clojure.lang.ILookup
+  (valAt [this key]
+    (lookup this key))
+  (valAt [this key not-found]
+    (if-let [res (lookup this key)]
+      res
+      not-found)))
 
 (deftype FIFOCache [cache q limit]
   CacheProtocol

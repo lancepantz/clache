@@ -27,7 +27,7 @@ A cache library for Clojure implementing different strategies.
 
 # credits
 
-Thanks to [Justin Balthrop](http://ninjudd.com/) for letting me steal the name *clache* and [deduktion](https://github.com/deduktion) for the LIRS implementation.
+Thanks to [Justin Balthrop](http://ninjudd.com/) for letting me steal the name *clache* and [deduktion](https://github.com/deduktion) for the LIRS implementation.  Also thanks to Sebastián Galkin for bugs fixes and support.
 
 License
 -------

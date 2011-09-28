@@ -7,6 +7,15 @@
   (testing "that the BasicCache can lookup as expected"
     (is (= :robot (lookup (miss (BasicCache. {}) '(servo) :robot) '(servo))))))
 
+(deftest test-basic-cache-ilookup
+  (testing "that the BasicCache can lookup via keywords"
+    (let [c (BasicCache. {:a 1 :b 2})]
+      (are [expect actual]
+           1   (:a c)
+           2   (:b 2)
+           42  (:X c 42)
+           nil (:X c)))))
+
 (defn- lirs-map [lirs]
   {:cache (.cache lirs)
    :lruS (.lruS lirs)
