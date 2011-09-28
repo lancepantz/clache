@@ -14,7 +14,11 @@
            1   (:a c)
            2   (:b 2)
            42  (:X c 42)
-           nil (:X c)))))
+           nil (:X c)
+           1   (get c :a)
+           2   (get c :b)
+           42  (get c :X 42)
+           nil (get c :X)))))
 
 (defn- lirs-map [lirs]
   {:cache (.cache lirs)
