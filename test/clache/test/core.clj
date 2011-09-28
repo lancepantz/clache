@@ -10,9 +10,9 @@
 (deftest test-basic-cache-ilookup
   (testing "that the BasicCache can lookup via keywords"
     (let [c (BasicCache. {:a 1 :b 2})]
-      (are [expect actual]
+      (are [expect actual] (= expect actual)
            1   (:a c)
-           2   (:b 2)
+           2   (:b c)
            42  (:X c 42)
            nil (:X c)
            1   (get c :a)

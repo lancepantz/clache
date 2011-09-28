@@ -5,4 +5,5 @@
                      [jline "0.9.94"]
                      [swank-clojure "1.3.1"]
                      [marginalia "0.6.1"]
-                     [lein-marginalia "0.6.1"]])
+                     [lein-marginalia "0.6.1"]
+                     [test.generative "0.1.4-SNAPHOT"]])
