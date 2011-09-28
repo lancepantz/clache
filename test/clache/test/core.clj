@@ -1,7 +1,7 @@
 (ns clache.test.core
   (:use [fogus.clache] :reload-all)
   (:use [clojure.test])
-  (:import [fogus.clache BasicCache LIRSCache]))
+  (:import [fogus.clache BasicCache FIFOCache LIRSCache]))
 
 (deftest test-basic-cache-lookup
   (testing "that the BasicCache can lookup as expected"
@@ -19,6 +19,20 @@
            2   (get c :b)
            42  (get c :X 42)
            nil (get c :X)))))
+
+(deftest test-fifo-cache-ilookup
+  (testing "that the FifoCache can lookup via keywords"
+    (let [c (FIFOCache. {:a 1 :b 2} clojure.lang.PersistentQueue/EMPTY 2)]
+      (are [expect actual] (= expect actual)
+           1   (:a c)
+           2   (:b c)
+           42  (:X c 42)
+           nil (:X c)
+           1   (get c :a)
+           2   (get c :b)
+           42  (get c :X 42)
+           nil (get c :X)))))
+
 
 (defn- lirs-map [lirs]
   {:cache (.cache lirs)

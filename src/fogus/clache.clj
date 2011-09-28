@@ -61,7 +61,7 @@
   Object
   (toString [_] (str cache)))
 
-(deftype FIFOCache [cache q limit]
+(defcache FIFOCache [cache q limit]
   CacheProtocol
   (lookup [_ item]
     (get cache item))
