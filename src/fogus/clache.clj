@@ -34,22 +34,20 @@
    The contract is that said cache should return an instance of its
    own type."))
 
-(defprotocol Lookup
-  (valAt [this key]
-         [this key not-found]))
+(defmacro defcache
+  [cache-name fields & specifics]
+  `(deftype ~cache-name [~@fields]
+     ~@specifics
+     
+     clojure.lang.ILookup
+     (valAt [this# key#]
+       (lookup this# key#))
+     (valAt [this# key# not-found#]
+       (if-let [res# (lookup this# key#)]
+         res#
+         not-found#))))
 
-(def ^:private base-behavior
-  {:valAt (fn
-            ([this key]
-               (lookup this key))
-            ([this key not-found]
-               (if-let [res (lookup this key)]
-                 res
-                 not-found)))})
-
-(extend clojure.lang.ILookup Lookup)
-
-(deftype BasicCache [cache]
+(defcache BasicCache [cache]
   CacheProtocol
   (lookup [_ item]
     (get cache item))
@@ -61,19 +59,7 @@
   (seed [_ base]
     (BasicCache. base))
   Object
-  (toString [_] (str cache))
-
-  clojure.lang.ILookup
-  (valAt [this key]
-         (lookup this key))
-  (valAt [this key not-found]
-         (if-let [res (lookup this key)]
-           res
-           not-found)))
-
-#_(extend BasicCache
-  Lookup
-  base-behavior)
+  (toString [_] (str cache)))
 
 (deftype FIFOCache [cache q limit]
   CacheProtocol
