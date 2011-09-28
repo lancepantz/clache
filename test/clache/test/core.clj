@@ -7,31 +7,24 @@
   (testing "that the BasicCache can lookup as expected"
     (is (= :robot (lookup (miss (BasicCache. {}) '(servo) :robot) '(servo))))))
 
+(defn do-ilookup-tests [c]
+  (are [expect actual] (= expect actual)
+       1   (:a c)
+       2   (:b c)
+       42  (:X c 42)
+       nil (:X c)
+       1   (get c :a)
+       2   (get c :b)
+       42  (get c :X 42)
+       nil (get c :X)))
+
 (deftest test-basic-cache-ilookup
   (testing "that the BasicCache can lookup via keywords"
-    (let [c (BasicCache. {:a 1 :b 2})]
-      (are [expect actual] (= expect actual)
-           1   (:a c)
-           2   (:b c)
-           42  (:X c 42)
-           nil (:X c)
-           1   (get c :a)
-           2   (get c :b)
-           42  (get c :X 42)
-           nil (get c :X)))))
+    (do-ilookup-tests (BasicCache. {:a 1 :b 2}))))
 
 (deftest test-fifo-cache-ilookup
   (testing "that the FifoCache can lookup via keywords"
-    (let [c (FIFOCache. {:a 1 :b 2} clojure.lang.PersistentQueue/EMPTY 2)]
-      (are [expect actual] (= expect actual)
-           1   (:a c)
-           2   (:b c)
-           42  (:X c 42)
-           nil (:X c)
-           1   (get c :a)
-           2   (get c :b)
-           42  (get c :X 42)
-           nil (get c :X)))))
+    (do-ilookup-tests (FIFOCache. {:a 1 :b 2} clojure.lang.PersistentQueue/EMPTY 2))))
 
 
 (defn- lirs-map [lirs]
