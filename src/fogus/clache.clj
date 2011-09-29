@@ -88,7 +88,7 @@
   (print-method (seq q) w)
   (print-method '-< w))
 
-(deftype LRUCache [cache lru tick limit]
+(defcache LRUCache [cache lru tick limit]
   CacheProtocol
   (lookup [_ item]
     (get cache item))
@@ -202,7 +202,7 @@
         (recur (dissoc s k) q c)
         s))))
 
-(deftype LIRSCache [cache lruS lruQ tick limitS limitQ]
+(defcache LIRSCache [cache lruS lruQ tick limitS limitQ]
   CacheProtocol
   (lookup [_ item]
     (get cache item))
@@ -275,7 +275,7 @@
 
 (declare key-killer)
 
-(deftype TTLCache [cache ttl limit]
+(defcache TTLCache [cache ttl limit]
   CacheProtocol
   (lookup [_ item]
     (get cache item))
@@ -308,7 +308,7 @@
     #(apply dissoc % ks)))
 
 
-(deftype LUCache [cache lu limit]
+(defcache LUCache [cache lu limit]
   CacheProtocol
   (lookup [_ item]
     (get cache item))
@@ -330,7 +330,7 @@
   (toString [_]
     (str cache \, \space lu \, \space limit)))
 
-(deftype SoftCache [cache rq]
+(defcache SoftCache [cache rq]
   CacheProtocol
   (lookup [_ item]
     (loop [r   (get cache item)

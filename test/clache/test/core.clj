@@ -1,7 +1,7 @@
 (ns clache.test.core
   (:use [fogus.clache] :reload-all)
   (:use [clojure.test])
-  (:import [fogus.clache BasicCache FIFOCache LIRSCache]))
+  (:import [fogus.clache BasicCache FIFOCache LRUCache LIRSCache TTLCache LUCache SoftCache]))
 
 (deftest test-basic-cache-lookup
   (testing "that the BasicCache can lookup as expected"
@@ -26,6 +26,26 @@
   (testing "that the FifoCache can lookup via keywords"
     (do-ilookup-tests (FIFOCache. {:a 1 :b 2} clojure.lang.PersistentQueue/EMPTY 2))))
 
+(deftest test-lru-cache-ilookup
+  (testing "that the LRUCache can lookup via keywords"
+    (do-ilookup-tests (LRUCache. {:a 1 :b 2} {} 0 2))))
+
+(deftest test-lirs-cache-ilookup
+  (testing "that the LIRSCache can lookup via keywords"
+    (do-ilookup-tests (LIRSCache. {:a 1 :b 2} {} {} 0 1 1))))
+
+(deftest test-ttl-cache-ilookup
+  (testing "that the TTLCache can lookup via keywords"
+    (do-ilookup-tests (TTLCache. {:a 1 :b 2} 10 2))))
+
+(deftest test-lu-cache-ilookup
+  (testing "that the LUCache can lookup via keywords"
+    (do-ilookup-tests (LUCache. {:a 1 :b 2} {} 2))))
+
+#_(deftest test-soft-cache-ilookup
+  (testing "that the SoftCache can lookup via keywords"
+    (do-ilookup-tests (SoftCache. {:a (delay 1) :b (delay 2)}
+                                  (java.lang.ref.ReferenceQueue.)))))
 
 (defn- lirs-map [lirs]
   {:cache (.cache lirs)
