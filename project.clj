@@ -6,4 +6,5 @@
                      [swank-clojure "1.3.1"]
                      [marginalia "0.6.1"]
                      [lein-marginalia "0.6.1"]
-                     [test.generative "0.1.4-SNAPHOT"]])
+                     [org.clojure/test.generative "0.1.4-SNAPSHOT"]]
+  :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"})

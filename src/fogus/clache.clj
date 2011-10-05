@@ -32,7 +32,9 @@
   (seed    [cache base]
    "Is used to signal that the cache should be created with a seed.
    The contract is that said cache should return an instance of its
-   own type."))
+   own type.")
+  (-base   [cache]
+   "Used to grab the underlying storage struct."))
 
 (defmacro defcache
   [cache-name fields & specifics]
@@ -45,7 +47,30 @@
      (valAt [this# key# not-found#]
        (if-let [res# (lookup this# key#)]
          res#
-         not-found#))))
+         not-found#))
+
+     clojure.lang.IPersistentMap
+     (assoc [this# k# v#]
+       (seed this#
+             (assoc (-base this#) k# v#)))
+     (without [this# k#]
+       (seed this#
+             (dissoc (-base this#) k#)))
+
+     clojure.lang.Counted
+     (count [this#]
+       (count (-base this#)))
+
+     clojure.lang.Associative
+     (containsKey [this# k#]
+       (contains? (-base this#) k#))
+     (entryAt [this# k#]
+       (find (-base this#) k#))
+
+     ;; Java interfaces
+     java.lang.Iterable
+     (iterator [this#] (.iterator (-base this#)))))
+
 
 (defcache BasicCache [cache]
   CacheProtocol
