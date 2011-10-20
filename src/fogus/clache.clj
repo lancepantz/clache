@@ -52,14 +52,14 @@
      clojure.lang.IPersistentMap
      (assoc [this# k# v#]
        (seed this#
-             (assoc (-base this#) k# v#)))
+             (clojure.core/assoc (-base this#) k# v#)))
      (without [this# k#]
        (seed this#
              (dissoc (-base this#) k#)))
 
      clojure.lang.Counted
      (count [this#]
-       (count (-base this#)))
+       (clojure.core/count (-base this#)))
 
      clojure.lang.Associative
      (containsKey [this# k#]
@@ -67,10 +67,50 @@
      (entryAt [this# k#]
        (find (-base this#) k#))
 
+     clojure.lang.IPersistentCollection
+     (cons [this elem] nil)
+     (empty [this] nil)
+     (equiv [this other] false)
+
+     clojure.lang.Seqable
+     (seq [this] nil)
+
      ;; Java interfaces
      java.lang.Iterable
      (iterator [this#] (.iterator (-base this#)))))
 
+(comment
+  (def b (BasicCache. {:a 1 :b 2}))
+
+  (count b)
+  (.iterator b)
+  (find b :b)
+  (contains? b :a)
+  (:a b)
+  (assoc b :c 3)
+
+  (apply #'and nil nil [1 2])
+
+  (defn sqr-contract [f n]
+    {:pre  [(number? n)]
+     :post [(number? %) (pos? %)]}
+    (f n))
+
+  (defn sqr-actions [n]
+    (* n n))
+  
+  (defn sqr-contract-zero [f n]
+    {:pre  [(not= 0 n)]}
+    (f n))
+
+  (def sqr (partial sqr-contract-zero
+                    (partial sqr-contract
+                             sqr-actions)))
+
+  (sqr :a)
+  (sqr 0)
+  (sqr 10)
+)
 
 (defcache BasicCache [cache]
   CacheProtocol
@@ -83,6 +123,7 @@
     (BasicCache. (assoc cache item result)))
   (seed [_ base]
     (BasicCache. base))
+  (-base [_] cache)
   Object
   (toString [_] (str cache)))
 
