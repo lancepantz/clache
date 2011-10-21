@@ -68,12 +68,12 @@
        (find (-base this#) k#))
 
      clojure.lang.IPersistentCollection
-     (cons [this elem] nil)
-     (empty [this] nil)
-     (equiv [this other] false)
+     (cons [this# elem#] (cons (-base this#) elem#))
+     (empty [this#] (seed this# (empty (-base this#))))
+     (equiv [this# other#] (.equiv (-base this#) other#))
 
      clojure.lang.Seqable
-     (seq [this] nil)
+     (seq [this#] (seq (-base this#)))
 
      ;; Java interfaces
      java.lang.Iterable
@@ -81,6 +81,7 @@
 
 (comment
   (def b (BasicCache. {:a 1 :b 2}))
+  (type b)
 
   (count b)
   (.iterator b)
@@ -88,28 +89,10 @@
   (contains? b :a)
   (:a b)
   (assoc b :c 3)
+  (type (assoc b :c 3))
+  (dissoc b :a)
 
-  (apply #'and nil nil [1 2])
-
-  (defn sqr-contract [f n]
-    {:pre  [(number? n)]
-     :post [(number? %) (pos? %)]}
-    (f n))
-
-  (defn sqr-actions [n]
-    (* n n))
-  
-  (defn sqr-contract-zero [f n]
-    {:pre  [(not= 0 n)]}
-    (f n))
-
-  (def sqr (partial sqr-contract-zero
-                    (partial sqr-contract
-                             sqr-actions)))
-
-  (sqr :a)
-  (sqr 0)
-  (sqr 10)
+  (seq b)
 )
 
 (defcache BasicCache [cache]
