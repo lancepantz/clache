@@ -1,4 +1,4 @@
-(defproject clache "0.6.1"
+(defproject clache "0.7.0"
   :description "A cache library for Clojure implementing different strategies."
   :dependencies [[org.clojure/clojure "1.3.0"]]
   :dev-dependencies [[lein-clojars "0.5.0-SNAPSHOT"]
