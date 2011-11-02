@@ -128,6 +128,7 @@
                 (into clojure.lang.PersistentQueue/EMPTY
                       (repeat limit :free))
                 limit))
+  (-base [_] cache)
   Object
   (toString [_]
     (str cache \, \space (pr-str q))))
@@ -161,6 +162,7 @@
                (into {} (for [x (range (- limit) 0)] [x x]))
                0
                limit))
+  (-base [_] cache)
   Object
   (toString [_]
     (str cache \, \space lru \, \space tick \, \space limit)))
@@ -317,6 +319,7 @@
                 0
                 limitS
                 limitQ))
+  (-base [_] cache)
   Object
   (toString [_]
     (str cache \, \space lruS \, \space lruQ \, \space tick \, \space limitS \, \space limitQ)))
@@ -345,7 +348,7 @@
       (TTLCache. base
                  (into {} (for [x base] [(key x) now]))
                  limit)))
-
+  (-base [_] cache)
   Object
   (toString [_]
     (str cache \, \space ttl \, \space limit)))
@@ -374,7 +377,7 @@
     (LUCache. base
               (into {} (for [x (range (- limit) 0)] [x x]))
               limit))
-  
+  (-base [_] cache)
   Object
   (toString [_]
     (str cache \, \space lu \, \space limit)))
@@ -399,6 +402,7 @@
                 rq))
   (seed [_ base]
     (SoftCache. base rq))
+  (-base [_] cache)
   Object
   (toString [_] (str cache)))
 
